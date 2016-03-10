@@ -1,1 +1,1 @@
-<?php include_once("HW7"); ?>
+<?php include_once("HW7.html"); ?>
