@@ -1,0 +1,144 @@
+
+<html>
+<head>
+	<title>Favorite Movies</title>
+	
+</head>
+<style>
+body{
+background-image: url("earth.jpg");
+}
+#item1{
+	float:right;
+	position:relative;
+	right:100px;
+	bottom:200px;
+}
+#item4{
+	float:right;
+		position:relative;
+	right:100px;
+
+}
+#item0{
+	position:relative;
+	bottom:300px;
+	left:400px;
+}
+h1{
+	position:relative;
+	left:400px;
+}
+
+</style>
+
+<body>
+<div class="container">
+
+<h1> Giphy Search </h1>
+<div id="buttons"></div>
+<form id="giphyForm">
+<label for="giphyInput">Add a giphy</label>
+	<input id="getGiphy" type="text">
+	<input id="giphybutton" type="submit">
+	</form>
+ 
+ 
+ <div id="giphySpot">
+ <div id="limit">
+ <!-- <button class ="giphy" data-name ="x">x </button>-->
+<script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
+<script type="text/javascript">
+	
+
+var giphyArray=['cat'];
+//<button class="giphy" data-name="cat">cat</button>
+function appendNewButton(giphy){     //userinput is the paramter
+	    var a = $('<button>')			//make a new button
+	    a.addClass('giphy');			//add class movie to button tag
+	    a.attr('data-name', giphy);		//add attribute 
+	    a.text(giphy);					//add movie name to html
+	    $('#buttons').append(a); //append the html to the ID
+	    console.log(giphy)
+	}
+	function renderButtons(){    //put the array of movies in first  and appedn the newly created movies
+		for (var i = 0; i < giphyArray.length; i++){
+		    appendNewButton(giphyArray[i])
+		}
+	}
+
+	function makeElem(type, data, elemToappendTo){
+		var childElem = $(type).text(data);
+
+		elemToappendTo.append(childElem);
+	}
+function displayMovieInfo(){  //each time u click button make a new movieDIV
+		var giphy = $(this).data('name'); ///???dont see this in inspect element
+		var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + giphy + "&api_key=dc6zaTOxFJmzC&limit=10" 
+		
+		$.ajax({url: queryURL, method: 'GET'}).done(function(response) {
+			var giphyDiv = $('<div class="giphyDiv">'); //making a new div for each button press
+         	var results = response.data;
+         	console.log(results)
+         	for(var i=0; i < 5; i++){
+            	var gifDiv = $('<div id="item'+i+'" val='+i+'>')
+             	
+             	var rating = results[i].rating;
+             	var giphy = $('<p>').text( "Rating: " + rating);
+             	var giphyImage = $('<img>');
+             	giphyImage.attr('src', results[i].images.fixed_height.url);
+             	console.log(giphyImage);
+             	gifDiv.append(giphy)
+             	gifDiv.append(giphyImage)
+             	$('#giphySpot').prepend(gifDiv);
+             	//append each pic so they are next to eachother
+             	
+
+             	//click for stilness.relace the animate image with a still image 
+
+             	$('#item'+i+'').on('click',function(){
+             		alert("hey")
+             		var img = $('<img />', { 
+ 					 id: 'Stillness',
+ 					 src: results[i].images.original_still.url,
+ 					 alt: 'MyAlt'
+
+					});
+					//if statement and the attribute should use this keyword. 
+					 $(this).find('img').attr("src", response.data[0].images.original_still.url);
+
+             			console.log(img)
+             			
+
+				});
+             
+         }  
+             	
+
+ 			$('#giphySpot').prepend(giphyDiv);
+			//.append() puts it to the right of ID
+			//.prepend() puts it to the left of ID
+
+		}); 
+	}
+
+	renderButtons();
+$('#giphybutton').on('click', function(){
+
+	var giphInput = $('#getGiphy').val().trim(); //gets user input
+
+	giphyArray.push(giphInput); //pushes it into movies  array
+		
+	appendNewButton(giphInput); //call function and bring user inout into it 
+
+$('#giphySpot').empty(); 
+	return false;
+	});
+//animate-still click 
+
+	$(document).on('click','.giphy', displayMovieInfo);  //start with this function?????
+	
+	</script>
+	</body>
+	</html>
+
